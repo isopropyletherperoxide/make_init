@@ -3,6 +3,14 @@
 int main(int argc, char *argv[]) {
   char *proj_name;
   git_repository *repo;
+  char cwd[PATH_MAX];
+  errno = 0;
+
+  if (access(getcwd(cwd, sizeof(cwd)), W_OK) == -1) {
+    perror("Error!");
+    exit(errno);
+  }
+
   if (argc < 1) {
     printf("Not Enough Arguments!");
     return 1;
@@ -25,7 +33,6 @@ int main(int argc, char *argv[]) {
     printf("Error while creating files!");
     return 1;
   }
-  char cwd[PATH_MAX];
   git_libgit2_init();
   git_repository_init(&repo, getcwd(cwd, sizeof(cwd)), 0);
   if (errno != 0) {
@@ -35,24 +42,12 @@ int main(int argc, char *argv[]) {
 }
 
 void create_makefile(char *proj_name) {
-  errno = 0;
-  int fd = access("Makefile", W_OK);
-  if (fd == -1) {
-    perror("Error!");
-    exit(1);
-  }
   FILE *fp = fopen("Makefile", "a");
   fprintf(fp, "all:\n\tcc main.c -Wall -lm -o %s", proj_name);
   fclose(fp);
 }
 
 void create_file(char *fname, char *contents) {
-  errno = 0;
-  int fd = access(fname, W_OK);
-  if (fd == -1) {
-    perror("Error!");
-    exit(1);
-  }
   FILE *fp = fopen(fname, "a");
   if (contents != NULL) {
     fprintf(fp, "%s", contents);
