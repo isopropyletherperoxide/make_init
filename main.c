@@ -43,7 +43,9 @@ int main(int argc, char *argv[]) {
 
 void create_makefile(char *proj_name) {
   FILE *fp = fopen("Makefile", "a");
-  fprintf(fp, "all:\n\tcc main.c -Wall -lm -o %s", proj_name);
+  fprintf(fp, "all:\n\tcc main.c -Wall -lm -o %s\n", proj_name);
+  fprintf(fp, "clean:\n\t rm %s \n", proj_name);
+  fprintf(fp, "install:\n\t cp %s /usr/local/bin \n", proj_name);
   fclose(fp);
 }
 
