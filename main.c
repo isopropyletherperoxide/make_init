@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
   errno = 0;
 
   if (access(getcwd(cwd, sizeof(cwd)), W_OK) == -1) {
-    perror("Error!");
+    perror("\x1b[31mError!\x1b[0m");
     exit(errno);
   }
 
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
   }
 
   if (file_exists("Makefile")) {
-    printf("Makefile Exists! \n");
+    printf("\x1b[31mMakefile Exists! \x1b[0m \n");
     return 1;
   }
   errno = 0;
@@ -30,13 +30,14 @@ int main(int argc, char *argv[]) {
   create_file("main.c", "#include \"main.h\" \n");
   create_file("main.h", NULL);
   if (errno != 0) {
-    printf("Error while creating files!");
+    printf("\x1b[31mError during file creation! \x1b[0m \n");
+    perror("\x1b[31mError! \x1b[0m \n");
     return 1;
   }
   git_libgit2_init();
   git_repository_init(&repo, getcwd(cwd, sizeof(cwd)), 0);
   if (errno != 0) {
-    printf("Error during git init");
+    printf("\x1b[31mError during git init! \x1b[0m \n");
     return 1;
   }
 }
